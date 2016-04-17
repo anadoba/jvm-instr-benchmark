@@ -8,7 +8,8 @@ import java.util.Random;
 
 public class ClassGenerator {
 
-    private final String PACKAGE = this.getClass().getPackage().getName();
+    private final String PACKAGE = this.getClass().getPackage().getName() + ".generated";
+    private static final String PREFIX = "src/main/java";
     private Random random = new Random();
 
     public void generateMultiple(int amount) {
@@ -22,19 +23,23 @@ public class ClassGenerator {
         }
     }
 
-    private void generate(int number) throws JClassAlreadyExistsException {
+    private boolean generate(int number) throws JClassAlreadyExistsException {
         JCodeModel cm = new JCodeModel();
-        JDefinedClass dc = cm._class(PACKAGE + ".GeneratedClass" + number);
+        String targetClassName = PACKAGE + ".GeneratedClass" + number;
+        JDefinedClass dc = cm._class(targetClassName);
         JMethod m = dc.method(0, int.class, "print");
         m.body()._return(JExpr.lit(random.nextInt(1000)));
 
-        File file = new File(".");
+        File file = new File(PREFIX);
         file.mkdirs();
         try {
             cm.build(file);
+            System.out.println("Successfully generated class " + targetClassName);
+            return true;
         } catch (IOException ex) {
             System.out.println("Error during saving new class [" + file + "]");
             ex.printStackTrace();
+            return false;
         }
     }
 }
