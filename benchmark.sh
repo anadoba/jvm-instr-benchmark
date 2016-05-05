@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-printf "Benchmark script compares ASM and Javassist code instrumentation performance\n\n"
+printf "Benchmark script compares ASM and Javassist code instrumentation performance\n"
+printf "(takes about 8 minutes on a mobile Core i7 machine)\n\n"
 
 # generate test classes
 printf "\tGenerating test classes...\n"
-mvn compile exec:java -Dexec.args="1000" -q &>/dev/null
+mvn compile exec:java -Dexec.args="10000" -q &>/dev/null
 
 
 
@@ -147,6 +148,6 @@ rm -rf src/main/java/pl/nadoba/jvm/instrumentation/benchmark/generated
 
 # print the results
 printf "\n------------------------------------------------\n"
-printf "ASM transformer avg. execution time: $((asm_total/8)) ms\n"
-printf "Javassist transformer avg. execution time: $((javassist_total/8)) ms"
+printf "ASM transformer avg. testing time: $((asm_total/8)) ms\n"
+printf "Javassist transformer avg. testing time: $((javassist_total/8)) ms"
 printf "\n------------------------------------------------\n"
