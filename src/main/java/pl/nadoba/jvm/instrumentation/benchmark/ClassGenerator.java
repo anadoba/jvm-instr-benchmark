@@ -26,15 +26,15 @@ public class ClassGenerator {
     private boolean generate(int number) throws JClassAlreadyExistsException {
         JCodeModel cm = new JCodeModel();
         String targetClassName = PACKAGE + ".GeneratedClass" + number;
-        JDefinedClass dc = cm._class(targetClassName);
-        JMethod m = dc.method(0, int.class, "print");
+        JDefinedClass dc = cm._class(targetClassName)._implements(Countable.class);
+        JMethod m = dc.method(JMod.PUBLIC, int.class, "count");
         m.body()._return(JExpr.lit(random.nextInt(1000)));
 
         File file = new File(PREFIX);
         file.mkdirs();
         try {
             cm.build(file);
-            System.out.println("Successfully generated class " + targetClassName);
+            //System.out.println("Successfully generated class " + targetClassName);
             return true;
         } catch (IOException ex) {
             System.out.println("Error during saving new class [" + file + "]");
